@@ -1,0 +1,1 @@
+{"version":3,"file":"definitions.js","sourceRoot":"","sources":["../../src/definitions.ts"],"names":[],"mappings":"","sourcesContent":["export interface RewaaNearpayPlugin {\n  echo(options: { value: string }): Promise<{ value: string }>;\n  checkStatus(value: JSON): Promise<JSON>;\n}\n"]}
