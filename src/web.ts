@@ -7,4 +7,8 @@ export class RewaaNearpayWeb extends WebPlugin implements RewaaNearpayPlugin {
     console.log('ECHO', options);
     return options;
   }
+  async checkStatus(value: JSON): Promise<JSON> {
+    console.log('checkStatus', value);
+    return value;
+  }
 }
