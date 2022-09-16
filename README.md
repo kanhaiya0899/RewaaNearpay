@@ -15,7 +15,9 @@ npx cap sync
 
 * [`echo(...)`](#echo)
 * [`checkStatus(...)`](#checkstatus)
-* [Interfaces](#interfaces)
+* [`installApp(...)`](#installapp)
+* [`auth(...)`](#auth)
+* [`purchase(...)`](#purchase)
 
 </docgen-index>
 
@@ -40,29 +42,60 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 ### checkStatus(...)
 
 ```typescript
-checkStatus(value: JSON) => Promise<JSON>
+checkStatus(value: string) => Promise<string>
 ```
 
-| Param       | Type                                  |
-| ----------- | ------------------------------------- |
-| **`value`** | <code><a href="#json">JSON</a></code> |
+| Param       | Type                |
+| ----------- | ------------------- |
+| **`value`** | <code>string</code> |
 
-**Returns:** <code>Promise&lt;<a href="#json">JSON</a>&gt;</code>
+**Returns:** <code>Promise&lt;string&gt;</code>
 
 --------------------
 
 
-### Interfaces
+### installApp(...)
+
+```typescript
+installApp(value: string) => Promise<string>
+```
+
+| Param       | Type                |
+| ----------- | ------------------- |
+| **`value`** | <code>string</code> |
+
+**Returns:** <code>Promise&lt;string&gt;</code>
+
+--------------------
 
 
-#### JSON
+### auth(...)
 
-An intrinsic object that provides functions to convert JavaScript values to and from the JavaScript Object Notation (<a href="#json">JSON</a>) format.
+```typescript
+auth(options: { token: string; }) => Promise<{ token: string; }>
+```
 
-| Method        | Signature                                                                                                                                  | Description                                                                                    |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| **parse**     | (text: string, reviver?: ((this: any, key: string, value: any) =&gt; any) \| undefined) =&gt; any                                          | Converts a JavaScript Object Notation (<a href="#json">JSON</a>) string into an object.        |
-| **stringify** | (value: any, replacer?: ((this: any, key: string, value: any) =&gt; any) \| undefined, space?: string \| number \| undefined) =&gt; string | Converts a JavaScript value to a JavaScript Object Notation (<a href="#json">JSON</a>) string. |
-| **stringify** | (value: any, replacer?: (string \| number)[] \| null \| undefined, space?: string \| number \| undefined) =&gt; string                     | Converts a JavaScript value to a JavaScript Object Notation (<a href="#json">JSON</a>) string. |
+| Param         | Type                            |
+| ------------- | ------------------------------- |
+| **`options`** | <code>{ token: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ token: string; }&gt;</code>
+
+--------------------
+
+
+### purchase(...)
+
+```typescript
+purchase(options: { amount: string; }) => Promise<{ amount: string; }>
+```
+
+| Param         | Type                             |
+| ------------- | -------------------------------- |
+| **`options`** | <code>{ amount: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ amount: string; }&gt;</code>
+
+--------------------
 
 </docgen-api>

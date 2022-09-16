@@ -6,5 +6,16 @@ export declare class RewaaNearpayWeb extends WebPlugin implements RewaaNearpayPl
     }): Promise<{
         value: string;
     }>;
-    checkStatus(value: JSON): Promise<JSON>;
+    checkStatus(value: string): Promise<string>;
+    installApp(value: string): Promise<string>;
+    purchase(options: {
+        amount: string;
+    }): Promise<{
+        amount: string;
+    }>;
+    auth(options: {
+        token: string;
+    }): Promise<{
+        token: string;
+    }>;
 }
