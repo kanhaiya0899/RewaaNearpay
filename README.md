@@ -14,9 +14,7 @@ npx cap sync
 <docgen-index>
 
 * [`echo(...)`](#echo)
-* [`checkStatus(...)`](#checkstatus)
-* [`installApp(...)`](#installapp)
-* [`auth(...)`](#auth)
+* [`initPayment(...)`](#initpayment)
 * [`purchase(...)`](#purchase)
 
 </docgen-index>
@@ -39,10 +37,10 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 --------------------
 
 
-### checkStatus(...)
+### initPayment(...)
 
 ```typescript
-checkStatus(value: string) => Promise<string>
+initPayment(value: string) => Promise<string>
 ```
 
 | Param       | Type                |
@@ -50,36 +48,6 @@ checkStatus(value: string) => Promise<string>
 | **`value`** | <code>string</code> |
 
 **Returns:** <code>Promise&lt;string&gt;</code>
-
---------------------
-
-
-### installApp(...)
-
-```typescript
-installApp(value: string) => Promise<string>
-```
-
-| Param       | Type                |
-| ----------- | ------------------- |
-| **`value`** | <code>string</code> |
-
-**Returns:** <code>Promise&lt;string&gt;</code>
-
---------------------
-
-
-### auth(...)
-
-```typescript
-auth(options: { token: string; }) => Promise<{ token: string; }>
-```
-
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ token: string; }</code> |
-
-**Returns:** <code>Promise&lt;{ token: string; }&gt;</code>
 
 --------------------
 

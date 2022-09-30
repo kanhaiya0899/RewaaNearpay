@@ -22,7 +22,7 @@
         "slug": "echo"
       },
       {
-        "name": "checkStatus",
+        "name": "initPayment",
         "signature": "(value: string) => Promise<string>",
         "parameters": [
           {
@@ -35,39 +35,7 @@
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "checkstatus"
-      },
-      {
-        "name": "installApp",
-        "signature": "(value: string) => Promise<string>",
-        "parameters": [
-          {
-            "name": "value",
-            "docs": "",
-            "type": "string"
-          }
-        ],
-        "returns": "Promise<string>",
-        "tags": [],
-        "docs": "",
-        "complexTypes": [],
-        "slug": "installapp"
-      },
-      {
-        "name": "auth",
-        "signature": "(options: { token: string; }) => Promise<{ token: string; }>",
-        "parameters": [
-          {
-            "name": "options",
-            "docs": "",
-            "type": "{ token: string; }"
-          }
-        ],
-        "returns": "Promise<{ token: string; }>",
-        "tags": [],
-        "docs": "",
-        "complexTypes": [],
-        "slug": "auth"
+        "slug": "initpayment"
       },
       {
         "name": "purchase",

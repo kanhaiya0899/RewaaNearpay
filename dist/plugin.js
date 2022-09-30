@@ -10,20 +10,12 @@ var capacitorRewaaNearpay = (function (exports, core) {
             console.log('ECHO', options);
             return options;
         }
-        async checkStatus(value) {
-            console.log('checkStatus', value);
-            return value;
-        }
-        async installApp(value) {
-            console.log('installApp', value);
+        async initPayment(value) {
+            console.log('initPayment', value);
             return value;
         }
         async purchase(options) {
             console.log('purchase amount: ', options);
-            return options;
-        }
-        async auth(options) {
-            console.log('token: ', options);
             return options;
         }
     }
