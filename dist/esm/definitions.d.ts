@@ -4,7 +4,11 @@ export interface RewaaNearpayPlugin {
     }): Promise<{
         value: string;
     }>;
-    initPayment(value: string): Promise<string>;
+    initPayment(options: {
+        token: string;
+    }): Promise<{
+        token: string;
+    }>;
     purchase(options: {
         amount: string;
     }): Promise<{

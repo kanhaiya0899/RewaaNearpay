@@ -40,14 +40,14 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 ### initPayment(...)
 
 ```typescript
-initPayment(value: string) => Promise<string>
+initPayment(options: { token: string; }) => Promise<{ token: string; }>
 ```
 
-| Param       | Type                |
-| ----------- | ------------------- |
-| **`value`** | <code>string</code> |
+| Param         | Type                            |
+| ------------- | ------------------------------- |
+| **`options`** | <code>{ token: string; }</code> |
 
-**Returns:** <code>Promise&lt;string&gt;</code>
+**Returns:** <code>Promise&lt;{ token: string; }&gt;</code>
 
 --------------------
 

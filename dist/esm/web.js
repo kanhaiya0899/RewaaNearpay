@@ -4,9 +4,9 @@ export class RewaaNearpayWeb extends WebPlugin {
         console.log('ECHO', options);
         return options;
     }
-    async initPayment(value) {
-        console.log('initPayment', value);
-        return value;
+    async initPayment(options) {
+        console.log('initPayment', options);
+        return options;
     }
     async purchase(options) {
         console.log('purchase amount: ', options);

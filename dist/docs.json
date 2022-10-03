@@ -23,15 +23,15 @@
       },
       {
         "name": "initPayment",
-        "signature": "(value: string) => Promise<string>",
+        "signature": "(options: { token: string; }) => Promise<{ token: string; }>",
         "parameters": [
           {
-            "name": "value",
+            "name": "options",
             "docs": "",
-            "type": "string"
+            "type": "{ token: string; }"
           }
         ],
-        "returns": "Promise<string>",
+        "returns": "Promise<{ token: string; }>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
