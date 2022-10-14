@@ -52,6 +52,38 @@
         "docs": "",
         "complexTypes": [],
         "slug": "purchase"
+      },
+      {
+        "name": "reconcile",
+        "signature": "(options: { enableReceiptUi: boolean; }) => Promise<{ enableReceiptUi: boolean; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ enableReceiptUi: boolean; }"
+          }
+        ],
+        "returns": "Promise<{ enableReceiptUi: boolean; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "reconcile"
+      },
+      {
+        "name": "refund",
+        "signature": "(options: { enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }) => Promise<{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }"
+          }
+        ],
+        "returns": "Promise<{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "refund"
       }
     ],
     "properties": []

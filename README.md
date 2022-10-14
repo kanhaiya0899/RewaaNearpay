@@ -16,6 +16,8 @@ npx cap sync
 * [`echo(...)`](#echo)
 * [`initPayment(...)`](#initpayment)
 * [`purchase(...)`](#purchase)
+* [`reconcile(...)`](#reconcile)
+* [`refund(...)`](#refund)
 
 </docgen-index>
 
@@ -63,6 +65,36 @@ purchase(options: { amount: string; }) => Promise<{ amount: string; }>
 | **`options`** | <code>{ amount: string; }</code> |
 
 **Returns:** <code>Promise&lt;{ amount: string; }&gt;</code>
+
+--------------------
+
+
+### reconcile(...)
+
+```typescript
+reconcile(options: { enableReceiptUi: boolean; }) => Promise<{ enableReceiptUi: boolean; }>
+```
+
+| Param         | Type                                       |
+| ------------- | ------------------------------------------ |
+| **`options`** | <code>{ enableReceiptUi: boolean; }</code> |
+
+**Returns:** <code>Promise&lt;{ enableReceiptUi: boolean; }&gt;</code>
+
+--------------------
+
+
+### refund(...)
+
+```typescript
+refund(options: { enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }) => Promise<{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }>
+```
+
+| Param         | Type                                                                                                                                     |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }</code> |
+
+**Returns:** <code>Promise&lt;{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }&gt;</code>
 
 --------------------
 

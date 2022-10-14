@@ -15,4 +15,12 @@ export class RewaaNearpayWeb extends WebPlugin implements RewaaNearpayPlugin {
     console.log('purchase amount: ', options);
     return options;
   }
+  async reconcile(options: { enableReceiptUi: boolean }): Promise<{ enableReceiptUi: boolean }> {
+    console.log('reconcile: ', options);
+    return options;
+  }
+  async refund(options: { enableReceiptUi: boolean, amount: number, transactionReferenceRetrievalNumber: string, customerReferenceNumber: number }): Promise<{ enableReceiptUi: boolean, amount: number, transactionReferenceRetrievalNumber: string, customerReferenceNumber: number; }> {
+    console.log('refund: ', options);
+    return options;
+  }
 }

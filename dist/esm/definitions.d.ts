@@ -14,4 +14,20 @@ export interface RewaaNearpayPlugin {
     }): Promise<{
         amount: string;
     }>;
+    reconcile(options: {
+        enableReceiptUi: boolean;
+    }): Promise<{
+        enableReceiptUi: boolean;
+    }>;
+    refund(options: {
+        enableReceiptUi: boolean;
+        amount: number;
+        transactionReferenceRetrievalNumber: string;
+        customerReferenceNumber: number;
+    }): Promise<{
+        enableReceiptUi: boolean;
+        amount: number;
+        transactionReferenceRetrievalNumber: string;
+        customerReferenceNumber: number;
+    }>;
 }

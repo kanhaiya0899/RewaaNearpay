@@ -17,10 +17,15 @@ import java.util.Locale;
 
 import io.nearpay.sdk.Environments;
 import io.nearpay.sdk.NearPay;
+import io.nearpay.sdk.data.models.ReconciliationReceipt;
 import io.nearpay.sdk.data.models.TransactionReceipt;
 import io.nearpay.sdk.utils.enums.PurchaseFailure;
+import io.nearpay.sdk.utils.enums.ReconcileFailure;
+import io.nearpay.sdk.utils.enums.RefundFailure;
 import io.nearpay.sdk.utils.enums.StatusCheckError;
 import io.nearpay.sdk.utils.listeners.PurchaseListener;
+import io.nearpay.sdk.utils.listeners.ReconcileListener;
+import io.nearpay.sdk.utils.listeners.RefundListener;
 
 @CapacitorPlugin(name = "RewaaNearpay")
   public class RewaaNearpayPlugin extends Plugin {
@@ -71,6 +76,7 @@ import io.nearpay.sdk.utils.listeners.PurchaseListener;
                 JSObject ret = new JSObject();
                 ret.put("paymentStatus", true);
                 ret.put("crn", transactionReceipt.getPayment_account_reference());
+                ret.put("reference_retrieval", transactionReceipt.getReference_retrieval_number());
                 ret.put("status_msg", transactionReceipt.getStatus_message());
                 ret.put("tid", transactionReceipt.getTid());
                 ret.put("is_approved", transactionReceipt.is_approved());
@@ -84,20 +90,16 @@ import io.nearpay.sdk.utils.listeners.PurchaseListener;
                 if (purchaseFailure instanceof PurchaseFailure.GeneralFailure) {
                     Log.e("purchaseFailure","GeneralFailure");
                     type = "GeneralFailure";
-                }
-                else if (purchaseFailure instanceof PurchaseFailure.PurchaseDeclined){
+                } else if (purchaseFailure instanceof PurchaseFailure.PurchaseDeclined){
                     Log.e("purchaseFailure","PurchaseDeclined");
                     type = "PurchaseDeclined";
-                }
-                else if (purchaseFailure instanceof PurchaseFailure.PurchaseRejected){
+                } else if (purchaseFailure instanceof PurchaseFailure.PurchaseRejected){
                     Log.e("purchaseFailure","PurchaseRejected");
                     type = "PurchaseRejected";
-                }
-                else if (purchaseFailure instanceof PurchaseFailure.AuthenticationFailed){
+                } else if (purchaseFailure instanceof PurchaseFailure.AuthenticationFailed){
                     Log.e("purchaseFailure","AuthenticationFailed");
                     type = "AuthenticationFailed";
-                }
-                else if (purchaseFailure instanceof PurchaseFailure.InvalidStatus){
+                } else if (purchaseFailure instanceof PurchaseFailure.InvalidStatus){
                     // you can get the status using the following code
                     List<StatusCheckError> status = ((PurchaseFailure.InvalidStatus) purchaseFailure).getStatus();
                     Log.e("purchaseFailure","InvalidStatus "+status.toString());
@@ -111,6 +113,90 @@ import io.nearpay.sdk.utils.listeners.PurchaseListener;
             }
         });
     }
+
+    @PluginMethod
+    public void reconcile(PluginCall call) {
+        Boolean enableReceiptUi = call.getBoolean("enableReceiptUi");
+        nearPay.reconcile(enableReceiptUi, new ReconcileListener() {
+            @Override
+            public void onReconcileFinished(@Nullable ReconciliationReceipt reconciliationReceipt) {
+                Log.i("onreconcileApproved",reconciliationReceipt.toString());
+                JSObject ret = new JSObject();
+                ret.put("reconcileStatus", true);
+                ret.put("reconciliationReceipt", reconciliationReceipt.toString());
+                call.resolve(ret);
+            }
+
+            @Override
+            public void onReconcileFailed(@NonNull ReconcileFailure reconcileFailure) {
+                Log.e("reconcileFailure",reconcileFailure.toString());
+                String type = "";
+                if (reconcileFailure instanceof ReconcileFailure.FailureMessage) {
+                    Log.e("reconcileFailure","GeneralFailure");
+                    type = "GeneralFailure";
+                } else if (reconcileFailure instanceof ReconcileFailure.AuthenticationFailed){
+                    Log.e("reconcileFailure","AuthenticationFailed");
+                    type = "AuthenticationFailed";
+                } else if (reconcileFailure instanceof ReconcileFailure.InvalidStatus){
+                    Log.e("reconcileFailure","InvalidStatus");
+                    type = "InvalidStatus";
+                } else if (reconcileFailure instanceof ReconcileFailure.GeneralFailure){
+                    Log.e("reconcileFailure","GeneralFailure");
+                    type = "GeneralFailure";
+                }
+                JSObject ret = new JSObject();
+                ret.put("reconcileStatus", false);
+                ret.put("error_type", type);
+                call.resolve(ret);
+            }
+        });
+    }
+
+ @PluginMethod
+   public void refund(PluginCall call) {
+    Integer amount = call.getInt("amount");
+    String transactionReferenceRetrievalNumber = call.getString("transactionReferenceRetrievalNumber");
+    Integer customerReferenceNumber = call.getInt("customerReferenceNumber");
+    Boolean enableReceiptUi = call.getBoolean("enableReceiptUi");
+
+    nearPay.refund(amount, transactionReferenceRetrievalNumber, String.valueOf(customerReferenceNumber), enableReceiptUi, new RefundListener() {
+      @Override
+      public void onRefundApproved(@Nullable TransactionReceipt transactionReceipt) {
+        Log.i("transactionReceipt", transactionReceipt.toString());
+        JSObject ret = new JSObject();
+        ret.put("refundStatus", true);
+        ret.put("transactionReceipt", transactionReceipt.toString());
+        call.resolve(ret);
+      }
+
+      @Override
+      public void onRefundFailed(@NonNull RefundFailure refundFailure) {
+        Log.e("RefundFailure", refundFailure.toString());
+        String type = "";
+        if (refundFailure instanceof RefundFailure.RefundDeclined) {
+          Log.e("refundFailure", "RefundDeclined");
+          type = "RefundDeclined";
+        } else if (refundFailure instanceof RefundFailure.RefundRejected) {
+          Log.e("refundFailure", "RefundRejected");
+          type = "RefundRejected";
+        } else if (refundFailure instanceof RefundFailure.AuthenticationFailed) {
+          Log.e("refundFailure", "AuthenticationFailed");
+          type = "AuthenticationFailed";
+        } else if (refundFailure instanceof RefundFailure.GeneralFailure) {
+          Log.e("refundFailure", "GeneralFailure");
+          type = "GeneralFailure";
+        } else if (refundFailure instanceof RefundFailure.InvalidStatus) {
+          Log.e("refundFailure", "InvalidStatus");
+          type = "InvalidStatus";
+        }
+        JSObject ret = new JSObject();
+        ret.put("refundStatus", false);
+        ret.put("error_type", type);
+        call.resolve(ret);
+      }
+    });
+  }
+
 
   public void sendEvent(JSObject data) {
     Log.e("percent", String.valueOf(data));
