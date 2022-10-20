@@ -68,9 +68,9 @@ import io.nearpay.sdk.utils.listeners.ReversalListener;
     public void purchase(PluginCall call) {
         Integer amount = call.getInt("amount");
         String crn = call.getString("crn");
-        Boolean isReceiptUI = call.getBoolean("receiptUI");
+        Boolean enableReceiptUi = call.getBoolean("enableReceiptUi");
 
-        nearPay.purchase(amount, crn, isReceiptUI, new PurchaseListener() {
+        nearPay.purchase(amount, crn, enableReceiptUi, new PurchaseListener() {
             @Override
             public void onPurchaseApproved(@Nullable TransactionReceipt transactionReceipt) {
                 Log.i("onPurchaseApproved",transactionReceipt.toString());
@@ -210,7 +210,7 @@ import io.nearpay.sdk.utils.listeners.ReversalListener;
             public void onReversalFinished(@Nullable TransactionReceipt transactionReceipt) {
                 Log.i("transactionReceipt", transactionReceipt.toString());
                 JSObject ret = new JSObject();
-                ret.put("reversalFailure", true);
+                ret.put("reverseStatus", true);
                 ret.put("transactionReceipt", transactionReceipt.toString());
                 call.resolve(ret);
             }
