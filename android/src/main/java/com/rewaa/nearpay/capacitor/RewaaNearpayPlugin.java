@@ -22,10 +22,12 @@ import io.nearpay.sdk.data.models.TransactionReceipt;
 import io.nearpay.sdk.utils.enums.PurchaseFailure;
 import io.nearpay.sdk.utils.enums.ReconcileFailure;
 import io.nearpay.sdk.utils.enums.RefundFailure;
+import io.nearpay.sdk.utils.enums.ReversalFailure;
 import io.nearpay.sdk.utils.enums.StatusCheckError;
 import io.nearpay.sdk.utils.listeners.PurchaseListener;
 import io.nearpay.sdk.utils.listeners.ReconcileListener;
 import io.nearpay.sdk.utils.listeners.RefundListener;
+import io.nearpay.sdk.utils.listeners.ReversalListener;
 
 @CapacitorPlugin(name = "RewaaNearpay")
   public class RewaaNearpayPlugin extends Plugin {
@@ -77,6 +79,7 @@ import io.nearpay.sdk.utils.listeners.RefundListener;
                 ret.put("paymentStatus", true);
                 ret.put("crn", transactionReceipt.getPayment_account_reference());
                 ret.put("reference_retrieval", transactionReceipt.getReference_retrieval_number());
+                ret.put("uuid", transactionReceipt.getUuid());
                 ret.put("status_msg", transactionReceipt.getStatus_message());
                 ret.put("tid", transactionReceipt.getTid());
                 ret.put("is_approved", transactionReceipt.is_approved());
@@ -197,6 +200,45 @@ import io.nearpay.sdk.utils.listeners.RefundListener;
     });
   }
 
+    @PluginMethod
+    public void reverse(PluginCall call) {
+        String transactionUuid = call.getString("transactionUuid");
+        Boolean enableReceiptUi = call.getBoolean("enableReceiptUi");
+
+        nearPay.reverse(transactionUuid, enableReceiptUi, new ReversalListener() {
+            @Override
+            public void onReversalFinished(@Nullable TransactionReceipt transactionReceipt) {
+                Log.i("transactionReceipt", transactionReceipt.toString());
+                JSObject ret = new JSObject();
+                ret.put("reversalFailure", true);
+                ret.put("transactionReceipt", transactionReceipt.toString());
+                call.resolve(ret);
+            }
+
+            @Override
+            public void onReversalFailed(@NonNull ReversalFailure reversalFailure) {
+                Log.e("reversalFailure", reversalFailure.toString());
+                String type = "";
+                if (reversalFailure instanceof ReversalFailure.AuthenticationFailed) {
+                    Log.e("reversalFailure", "AuthenticationFailed");
+                    type = "AuthenticationFailed";
+                } else if (reversalFailure instanceof ReversalFailure.GeneralFailure) {
+                    Log.e("reversalFailure", "GeneralFailure");
+                    type = "GeneralFailure";
+                } else if (reversalFailure instanceof ReversalFailure.FailureMessage) {
+                    Log.e("reversalFailure", "FailureMessage");
+                    type = "FailureMessage";
+                } else if (reversalFailure instanceof ReversalFailure.InvalidStatus) {
+                    Log.e("reversalFailure", "InvalidStatus");
+                    type = "InvalidStatus";
+                }
+                JSObject ret = new JSObject();
+                ret.put("reverseStatus", false);
+                ret.put("error_type", type);
+                call.resolve(ret);
+            }
+        });
+    }
 
   public void sendEvent(JSObject data) {
     Log.e("percent", String.valueOf(data));

@@ -20,5 +20,8 @@ export class RewaaNearpayWeb extends WebPlugin {
         console.log('refund: ', options);
         return options;
     }
+    async reverse(options) {
+        return options;
+    }
 }
 //# sourceMappingURL=web.js.map

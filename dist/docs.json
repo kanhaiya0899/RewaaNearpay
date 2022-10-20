@@ -84,6 +84,22 @@
         "docs": "",
         "complexTypes": [],
         "slug": "refund"
+      },
+      {
+        "name": "reverse",
+        "signature": "(options: { enableReceiptUi: boolean; transactionUuid: string; }) => Promise<{ enableReceiptUi: boolean; transactionUuid: string; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ enableReceiptUi: boolean; transactionUuid: string; }"
+          }
+        ],
+        "returns": "Promise<{ enableReceiptUi: boolean; transactionUuid: string; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "reverse"
       }
     ],
     "properties": []

@@ -18,6 +18,7 @@ npx cap sync
 * [`purchase(...)`](#purchase)
 * [`reconcile(...)`](#reconcile)
 * [`refund(...)`](#refund)
+* [`reverse(...)`](#reverse)
 
 </docgen-index>
 
@@ -95,6 +96,21 @@ refund(options: { enableReceiptUi: boolean; amount: number; transactionReference
 | **`options`** | <code>{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }</code> |
 
 **Returns:** <code>Promise&lt;{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }&gt;</code>
+
+--------------------
+
+
+### reverse(...)
+
+```typescript
+reverse(options: { enableReceiptUi: boolean; transactionUuid: string; }) => Promise<{ enableReceiptUi: boolean; transactionUuid: string; }>
+```
+
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code>{ enableReceiptUi: boolean; transactionUuid: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ enableReceiptUi: boolean; transactionUuid: string; }&gt;</code>
 
 --------------------
 

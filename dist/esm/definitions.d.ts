@@ -30,4 +30,11 @@ export interface RewaaNearpayPlugin {
         transactionReferenceRetrievalNumber: string;
         customerReferenceNumber: number;
     }>;
+    reverse(options: {
+        enableReceiptUi: boolean;
+        transactionUuid: string;
+    }): Promise<{
+        enableReceiptUi: boolean;
+        transactionUuid: string;
+    }>;
 }

@@ -26,6 +26,9 @@ var capacitorRewaaNearpay = (function (exports, core) {
             console.log('refund: ', options);
             return options;
         }
+        async reverse(options) {
+            return options;
+        }
     }
 
     var web = /*#__PURE__*/Object.freeze({

@@ -23,4 +23,7 @@ export class RewaaNearpayWeb extends WebPlugin implements RewaaNearpayPlugin {
     console.log('refund: ', options);
     return options;
   }
+  async reverse(options: { enableReceiptUi: boolean; transactionUuid: string; }): Promise<{ enableReceiptUi: boolean; transactionUuid: string; }> {
+    return options;
+  }
 }

@@ -29,6 +29,9 @@ class RewaaNearpayWeb extends core.WebPlugin {
         console.log('refund: ', options);
         return options;
     }
+    async reverse(options) {
+        return options;
+    }
 }
 
 var web = /*#__PURE__*/Object.freeze({

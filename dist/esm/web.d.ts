@@ -32,4 +32,11 @@ export declare class RewaaNearpayWeb extends WebPlugin implements RewaaNearpayPl
         transactionReferenceRetrievalNumber: string;
         customerReferenceNumber: number;
     }>;
+    reverse(options: {
+        enableReceiptUi: boolean;
+        transactionUuid: string;
+    }): Promise<{
+        enableReceiptUi: boolean;
+        transactionUuid: string;
+    }>;
 }
