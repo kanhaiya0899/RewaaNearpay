@@ -14,7 +14,8 @@ npx cap sync
 <docgen-index>
 
 * [`echo(...)`](#echo)
-* [`initPayment(...)`](#initpayment)
+* [`setupNearpay(...)`](#setupnearpay)
+* [`initNearpay(...)`](#initnearpay)
 * [`purchase(...)`](#purchase)
 * [`reconcile(...)`](#reconcile)
 * [`refund(...)`](#refund)
@@ -40,10 +41,25 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 --------------------
 
 
-### initPayment(...)
+### setupNearpay(...)
 
 ```typescript
-initPayment(options: { token: string; }) => Promise<{ token: string; }>
+setupNearpay(options: { token: string; }) => Promise<{ token: string; }>
+```
+
+| Param         | Type                            |
+| ------------- | ------------------------------- |
+| **`options`** | <code>{ token: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ token: string; }&gt;</code>
+
+--------------------
+
+
+### initNearpay(...)
+
+```typescript
+initNearpay(options: { token: string; }) => Promise<{ token: string; }>
 ```
 
 | Param         | Type                            |
@@ -58,14 +74,14 @@ initPayment(options: { token: string; }) => Promise<{ token: string; }>
 ### purchase(...)
 
 ```typescript
-purchase(options: { amount: string; }) => Promise<{ amount: string; }>
+purchase(options: { amount: string; token: string; }) => Promise<{ amount: string; token: string; }>
 ```
 
-| Param         | Type                             |
-| ------------- | -------------------------------- |
-| **`options`** | <code>{ amount: string; }</code> |
+| Param         | Type                                            |
+| ------------- | ----------------------------------------------- |
+| **`options`** | <code>{ amount: string; token: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ amount: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ amount: string; token: string; }&gt;</code>
 
 --------------------
 
@@ -73,14 +89,14 @@ purchase(options: { amount: string; }) => Promise<{ amount: string; }>
 ### reconcile(...)
 
 ```typescript
-reconcile(options: { enableReceiptUi: boolean; }) => Promise<{ enableReceiptUi: boolean; }>
+reconcile(options: { enableReceiptUi: boolean; token: string; }) => Promise<{ enableReceiptUi: boolean; token: string; }>
 ```
 
-| Param         | Type                                       |
-| ------------- | ------------------------------------------ |
-| **`options`** | <code>{ enableReceiptUi: boolean; }</code> |
+| Param         | Type                                                      |
+| ------------- | --------------------------------------------------------- |
+| **`options`** | <code>{ enableReceiptUi: boolean; token: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ enableReceiptUi: boolean; }&gt;</code>
+**Returns:** <code>Promise&lt;{ enableReceiptUi: boolean; token: string; }&gt;</code>
 
 --------------------
 
@@ -88,14 +104,14 @@ reconcile(options: { enableReceiptUi: boolean; }) => Promise<{ enableReceiptUi: 
 ### refund(...)
 
 ```typescript
-refund(options: { enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }) => Promise<{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }>
+refund(options: { enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; token: string; }) => Promise<{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; token: string; }>
 ```
 
-| Param         | Type                                                                                                                                     |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| **`options`** | <code>{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }</code> |
+| Param         | Type                                                                                                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; token: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }&gt;</code>
+**Returns:** <code>Promise&lt;{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; token: string; }&gt;</code>
 
 --------------------
 
@@ -103,14 +119,14 @@ refund(options: { enableReceiptUi: boolean; amount: number; transactionReference
 ### reverse(...)
 
 ```typescript
-reverse(options: { enableReceiptUi: boolean; transactionUuid: string; }) => Promise<{ enableReceiptUi: boolean; transactionUuid: string; }>
+reverse(options: { enableReceiptUi: boolean; transactionUuid: string; token: string; }) => Promise<{ enableReceiptUi: boolean; transactionUuid: string; token: string; }>
 ```
 
-| Param         | Type                                                                |
-| ------------- | ------------------------------------------------------------------- |
-| **`options`** | <code>{ enableReceiptUi: boolean; transactionUuid: string; }</code> |
+| Param         | Type                                                                               |
+| ------------- | ---------------------------------------------------------------------------------- |
+| **`options`** | <code>{ enableReceiptUi: boolean; transactionUuid: string; token: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ enableReceiptUi: boolean; transactionUuid: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ enableReceiptUi: boolean; transactionUuid: string; token: string; }&gt;</code>
 
 --------------------
 

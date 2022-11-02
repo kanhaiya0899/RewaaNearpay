@@ -52,7 +52,7 @@ repositories {
 
 
 dependencies {
-    implementation 'io.nearpay:nearpay-sdk:2.0.1'
+    implementation 'io.nearpay:nearpay-sdk:2.0.7'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"

@@ -22,7 +22,7 @@
         "slug": "echo"
       },
       {
-        "name": "initPayment",
+        "name": "setupNearpay",
         "signature": "(options: { token: string; }) => Promise<{ token: string; }>",
         "parameters": [
           {
@@ -35,19 +35,35 @@
         "tags": [],
         "docs": "",
         "complexTypes": [],
-        "slug": "initpayment"
+        "slug": "setupnearpay"
       },
       {
-        "name": "purchase",
-        "signature": "(options: { amount: string; }) => Promise<{ amount: string; }>",
+        "name": "initNearpay",
+        "signature": "(options: { token: string; }) => Promise<{ token: string; }>",
         "parameters": [
           {
             "name": "options",
             "docs": "",
-            "type": "{ amount: string; }"
+            "type": "{ token: string; }"
           }
         ],
-        "returns": "Promise<{ amount: string; }>",
+        "returns": "Promise<{ token: string; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "initnearpay"
+      },
+      {
+        "name": "purchase",
+        "signature": "(options: { amount: string; token: string; }) => Promise<{ amount: string; token: string; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ amount: string; token: string; }"
+          }
+        ],
+        "returns": "Promise<{ amount: string; token: string; }>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -55,15 +71,15 @@
       },
       {
         "name": "reconcile",
-        "signature": "(options: { enableReceiptUi: boolean; }) => Promise<{ enableReceiptUi: boolean; }>",
+        "signature": "(options: { enableReceiptUi: boolean; token: string; }) => Promise<{ enableReceiptUi: boolean; token: string; }>",
         "parameters": [
           {
             "name": "options",
             "docs": "",
-            "type": "{ enableReceiptUi: boolean; }"
+            "type": "{ enableReceiptUi: boolean; token: string; }"
           }
         ],
-        "returns": "Promise<{ enableReceiptUi: boolean; }>",
+        "returns": "Promise<{ enableReceiptUi: boolean; token: string; }>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -71,15 +87,15 @@
       },
       {
         "name": "refund",
-        "signature": "(options: { enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }) => Promise<{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }>",
+        "signature": "(options: { enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; token: string; }) => Promise<{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; token: string; }>",
         "parameters": [
           {
             "name": "options",
             "docs": "",
-            "type": "{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }"
+            "type": "{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; token: string; }"
           }
         ],
-        "returns": "Promise<{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; }>",
+        "returns": "Promise<{ enableReceiptUi: boolean; amount: number; transactionReferenceRetrievalNumber: string; customerReferenceNumber: number; token: string; }>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -87,15 +103,15 @@
       },
       {
         "name": "reverse",
-        "signature": "(options: { enableReceiptUi: boolean; transactionUuid: string; }) => Promise<{ enableReceiptUi: boolean; transactionUuid: string; }>",
+        "signature": "(options: { enableReceiptUi: boolean; transactionUuid: string; token: string; }) => Promise<{ enableReceiptUi: boolean; transactionUuid: string; token: string; }>",
         "parameters": [
           {
             "name": "options",
             "docs": "",
-            "type": "{ enableReceiptUi: boolean; transactionUuid: string; }"
+            "type": "{ enableReceiptUi: boolean; transactionUuid: string; token: string; }"
           }
         ],
-        "returns": "Promise<{ enableReceiptUi: boolean; transactionUuid: string; }>",
+        "returns": "Promise<{ enableReceiptUi: boolean; transactionUuid: string; token: string; }>",
         "tags": [],
         "docs": "",
         "complexTypes": [],

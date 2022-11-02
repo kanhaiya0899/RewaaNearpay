@@ -10,6 +10,14 @@ var capacitorRewaaNearpay = (function (exports, core) {
             console.log('ECHO', options);
             return options;
         }
+        async initNearpay(options) {
+            console.log('initNearpay', options);
+            return options;
+        }
+        async setupNearpay(options) {
+            console.log('setupNearpay', options);
+            return options;
+        }
         async initPayment(options) {
             console.log('initPayment', options);
             return options;
