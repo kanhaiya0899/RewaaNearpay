@@ -316,6 +316,30 @@ public class RewaaNearpayPlugin extends Plugin {
     });
   }
 
+  @PluginMethod
+  public void logoutNearpay(PluginCall call) {
+    nearPay.logout(new LogoutListener() {
+      @Override
+      public void onLogoutCompleted() {
+        JSObject ret = new JSObject();
+        ret.put("status", true);
+        call.resolve(ret);
+      }
+      @Override
+      public void onLogoutFailed(@NonNull LogoutFailure logoutFailure) {
+        JSObject ret = new JSObject();
+        if (logoutFailure instanceof LogoutFailure.AlreadyLoggedOut) {
+          ret.put("status", true);
+        }
+        else  if (logoutFailure instanceof LogoutFailure.GeneralFailure) {
+          ret.put("status", false);
+        }
+        call.resolve(ret);
+      }
+    });
+
+  }
+
   public void sendEvent(JSObject data) {
     Log.e("percent", String.valueOf(data));
     notifyListeners("downloadProgressChange", data);
