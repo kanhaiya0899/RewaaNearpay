@@ -16,6 +16,7 @@ npx cap sync
 * [`echo(...)`](#echo)
 * [`setupNearpay(...)`](#setupnearpay)
 * [`initNearpay(...)`](#initnearpay)
+* [`logoutNearpay(...)`](#logoutnearpay)
 * [`purchase(...)`](#purchase)
 * [`reconcile(...)`](#reconcile)
 * [`refund(...)`](#refund)
@@ -60,6 +61,21 @@ setupNearpay(options: { token: string; }) => Promise<{ token: string; }>
 
 ```typescript
 initNearpay(options: { token: string; }) => Promise<{ token: string; }>
+```
+
+| Param         | Type                            |
+| ------------- | ------------------------------- |
+| **`options`** | <code>{ token: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ token: string; }&gt;</code>
+
+--------------------
+
+
+### logoutNearpay(...)
+
+```typescript
+logoutNearpay(options: { token: string; }) => Promise<{ token: string; }>
 ```
 
 | Param         | Type                            |

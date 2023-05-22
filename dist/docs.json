@@ -54,6 +54,22 @@
         "slug": "initnearpay"
       },
       {
+        "name": "logoutNearpay",
+        "signature": "(options: { token: string; }) => Promise<{ token: string; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ token: string; }"
+          }
+        ],
+        "returns": "Promise<{ token: string; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "logoutnearpay"
+      },
+      {
         "name": "purchase",
         "signature": "(options: { amount: string; token: string; }) => Promise<{ amount: string; token: string; }>",
         "parameters": [

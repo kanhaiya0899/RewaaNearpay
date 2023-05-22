@@ -14,6 +14,11 @@ export interface RewaaNearpayPlugin {
     }): Promise<{
         token: string;
     }>;
+    logoutNearpay(options: {
+        token: string;
+    }): Promise<{
+        token: string;
+    }>;
     purchase(options: {
         amount: string;
         token: string;

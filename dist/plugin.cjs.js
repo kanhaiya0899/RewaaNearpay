@@ -25,6 +25,9 @@ class RewaaNearpayWeb extends core.WebPlugin {
         console.log('initPayment', options);
         return options;
     }
+    async logoutNearpay(options) {
+        return options;
+    }
     async purchase(options) {
         console.log('purchase amount: ', options);
         return options;
