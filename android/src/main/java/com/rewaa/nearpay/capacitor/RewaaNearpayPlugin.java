@@ -21,12 +21,14 @@ import io.nearpay.sdk.NearPay;
 import io.nearpay.sdk.data.models.ReconciliationReceipt;
 import io.nearpay.sdk.data.models.TransactionReceipt;
 import io.nearpay.sdk.utils.enums.AuthenticationData;
+import io.nearpay.sdk.utils.enums.LogoutFailure;
 import io.nearpay.sdk.utils.enums.PurchaseFailure;
 import io.nearpay.sdk.utils.enums.ReconcileFailure;
 import io.nearpay.sdk.utils.enums.RefundFailure;
 import io.nearpay.sdk.utils.enums.ReversalFailure;
 import io.nearpay.sdk.utils.enums.SetupFailure;
 import io.nearpay.sdk.utils.enums.StatusCheckError;
+import io.nearpay.sdk.utils.listeners.LogoutListener;
 import io.nearpay.sdk.utils.listeners.PurchaseListener;
 import io.nearpay.sdk.utils.listeners.ReconcileListener;
 import io.nearpay.sdk.utils.listeners.RefundListener;
@@ -132,7 +134,7 @@ public class RewaaNearpayPlugin extends Plugin {
     nearPay.purchase(amt, crn, enableReceiptUi, enableReversal, finishTimeOut, transactionId, enableUiDismiss, new PurchaseListener() {
       @Override
       public void onPurchaseApproved(@Nullable List<TransactionReceipt> list) {
-        TransactionReceipt transactionReceipt = list.get(0);        
+        TransactionReceipt transactionReceipt = list.get(0);
         JSObject ret = new JSObject();
         ret.put("paymentStatus", true);
         ret.put("crn", transactionReceipt.getPayment_account_reference());
