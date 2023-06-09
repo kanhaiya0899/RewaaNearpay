@@ -7,7 +7,7 @@ export class RewaaNearpayWeb extends WebPlugin implements RewaaNearpayPlugin {
     console.log('ECHO', options);
     return options;
   }
-  async initNearpay(options: { token: string }): Promise<{ token: string }> {
+  async initNearpay(options: { token: string, isProd: boolean }): Promise<{ token: string }> {
     console.log('initNearpay', options);
     return options;
   }

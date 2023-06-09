@@ -60,12 +60,12 @@ setupNearpay(options: { token: string; }) => Promise<{ token: string; }>
 ### initNearpay(...)
 
 ```typescript
-initNearpay(options: { token: string; }) => Promise<{ token: string; }>
+initNearpay(options: { token: string; isProd: boolean; }) => Promise<{ token: string; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ token: string; }</code> |
+| Param         | Type                                             |
+| ------------- | ------------------------------------------------ |
+| **`options`** | <code>{ token: string; isProd: boolean; }</code> |
 
 **Returns:** <code>Promise&lt;{ token: string; }&gt;</code>
 

@@ -39,12 +39,12 @@
       },
       {
         "name": "initNearpay",
-        "signature": "(options: { token: string; }) => Promise<{ token: string; }>",
+        "signature": "(options: { token: string; isProd: boolean; }) => Promise<{ token: string; }>",
         "parameters": [
           {
             "name": "options",
             "docs": "",
-            "type": "{ token: string; }"
+            "type": "{ token: string; isProd: boolean; }"
           }
         ],
         "returns": "Promise<{ token: string; }>",

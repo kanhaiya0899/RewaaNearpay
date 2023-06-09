@@ -8,6 +8,7 @@ export declare class RewaaNearpayWeb extends WebPlugin implements RewaaNearpayPl
     }>;
     initNearpay(options: {
         token: string;
+        isProd: boolean;
     }): Promise<{
         token: string;
     }>;

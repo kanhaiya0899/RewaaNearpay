@@ -61,10 +61,15 @@ public class RewaaNearpayPlugin extends Plugin {
   @PluginMethod
   public void initNearpay(PluginCall call) {
     String jwt = call.getString("token");
+    boolean isProd = call.getBoolean("isProd");
     AuthenticationData jwtData =  new AuthenticationData.Jwt(jwt);
     JSObject ret = new JSObject();
     if (!TextUtils.isEmpty(jwt)) {
-      nearPay = new NearPay(mContext, jwtData, Locale.getDefault(), Environments.SANDBOX);
+      if (isProd) {
+        nearPay = new NearPay(mContext, jwtData, Locale.getDefault(), Environments.PRODUCTION);
+      } else {
+        nearPay = new NearPay(mContext, jwtData, Locale.getDefault(), Environments.SANDBOX);
+      }
       if(nearPay != null)
         ret.put("status", true);
       else
