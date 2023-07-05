@@ -1,7 +1,9 @@
 package com.rewaa.nearpay.capacitor;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -20,6 +23,7 @@ import io.nearpay.sdk.Environments;
 import io.nearpay.sdk.NearPay;
 import io.nearpay.sdk.data.models.ReconciliationReceipt;
 import io.nearpay.sdk.data.models.TransactionReceipt;
+import io.nearpay.sdk.utils.ReceiptUtilsKt;
 import io.nearpay.sdk.utils.enums.AuthenticationData;
 import io.nearpay.sdk.utils.enums.LogoutFailure;
 import io.nearpay.sdk.utils.enums.PurchaseFailure;
@@ -28,6 +32,7 @@ import io.nearpay.sdk.utils.enums.RefundFailure;
 import io.nearpay.sdk.utils.enums.ReversalFailure;
 import io.nearpay.sdk.utils.enums.SetupFailure;
 import io.nearpay.sdk.utils.enums.StatusCheckError;
+import io.nearpay.sdk.utils.listeners.BitmapListener;
 import io.nearpay.sdk.utils.listeners.LogoutListener;
 import io.nearpay.sdk.utils.listeners.PurchaseListener;
 import io.nearpay.sdk.utils.listeners.ReconcileListener;
@@ -195,10 +200,20 @@ public class RewaaNearpayPlugin extends Plugin {
       @Override
       public void onReconcileFinished(@Nullable ReconciliationReceipt reconciliationReceipt) {
         Log.i("onreconcileApproved",reconciliationReceipt.toString());
-        JSObject ret = new JSObject();
-        ret.put("reconcileStatus", true);
-        ret.put("reconciliationReceipt", reconciliationReceipt.getQr_code());
-        call.resolve(ret);
+        ReceiptUtilsKt.toImage(reconciliationReceipt, mContext, 512, 14, new BitmapListener() {
+          @Override
+          public void result(@Nullable Bitmap bitmap) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            JSObject ret = new JSObject();
+            ret.put("reconcileStatus", true);
+//            ret.put("reconciliationReceipt", reconciliationReceipt.getQr_code());
+            ret.put("base64", encoded);
+            call.resolve(ret);
+          }
+        });
       }
 
       @Override
