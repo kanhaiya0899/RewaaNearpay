@@ -209,7 +209,7 @@ public class RewaaNearpayPlugin extends Plugin {
             String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
             JSObject ret = new JSObject();
             ret.put("reconcileStatus", true);
-//            ret.put("reconciliationReceipt", reconciliationReceipt.getQr_code());
+            ret.put("reconciliationReceipt", reconciliationReceipt.getQr_code());
             ret.put("base64", encoded);
             call.resolve(ret);
           }
