@@ -35,9 +35,11 @@ export declare class RewaaNearpayWeb extends WebPlugin implements RewaaNearpayPl
         token: string;
     }>;
     reconcile(options: {
+        reconcileId: string;
         enableReceiptUi: boolean;
         token: string;
     }): Promise<{
+        reconcileId: string;
         enableReceiptUi: boolean;
         token: string;
     }>;
@@ -61,6 +63,13 @@ export declare class RewaaNearpayWeb extends WebPlugin implements RewaaNearpayPl
     }): Promise<{
         enableReceiptUi: boolean;
         transactionUuid: string;
+        token: string;
+    }>;
+    getTransactionByUUID(options: {
+        transactionUUID: string;
+        token: string;
+    }): Promise<{
+        transactionUUID: string;
         token: string;
     }>;
 }

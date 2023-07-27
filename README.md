@@ -21,6 +21,7 @@ npx cap sync
 * [`reconcile(...)`](#reconcile)
 * [`refund(...)`](#refund)
 * [`reverse(...)`](#reverse)
+* [`getTransactionByUUID(...)`](#gettransactionbyuuid)
 
 </docgen-index>
 
@@ -105,14 +106,14 @@ purchase(options: { amount: string; token: string; }) => Promise<{ amount: strin
 ### reconcile(...)
 
 ```typescript
-reconcile(options: { enableReceiptUi: boolean; token: string; }) => Promise<{ enableReceiptUi: boolean; token: string; }>
+reconcile(options: { reconcileId: string; enableReceiptUi: boolean; token: string; }) => Promise<{ reconcileId: string; enableReceiptUi: boolean; token: string; }>
 ```
 
-| Param         | Type                                                      |
-| ------------- | --------------------------------------------------------- |
-| **`options`** | <code>{ enableReceiptUi: boolean; token: string; }</code> |
+| Param         | Type                                                                           |
+| ------------- | ------------------------------------------------------------------------------ |
+| **`options`** | <code>{ reconcileId: string; enableReceiptUi: boolean; token: string; }</code> |
 
-**Returns:** <code>Promise&lt;{ enableReceiptUi: boolean; token: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ reconcileId: string; enableReceiptUi: boolean; token: string; }&gt;</code>
 
 --------------------
 
@@ -143,6 +144,21 @@ reverse(options: { enableReceiptUi: boolean; transactionUuid: string; token: str
 | **`options`** | <code>{ enableReceiptUi: boolean; transactionUuid: string; token: string; }</code> |
 
 **Returns:** <code>Promise&lt;{ enableReceiptUi: boolean; transactionUuid: string; token: string; }&gt;</code>
+
+--------------------
+
+
+### getTransactionByUUID(...)
+
+```typescript
+getTransactionByUUID(options: { transactionUUID: string; token: string; }) => Promise<{ transactionUUID: string; token: string; }>
+```
+
+| Param         | Type                                                     |
+| ------------- | -------------------------------------------------------- |
+| **`options`** | <code>{ transactionUUID: string; token: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ transactionUUID: string; token: string; }&gt;</code>
 
 --------------------
 

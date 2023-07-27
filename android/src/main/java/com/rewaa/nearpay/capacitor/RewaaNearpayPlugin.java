@@ -13,6 +13,7 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -25,6 +26,7 @@ import io.nearpay.sdk.data.models.ReconciliationReceipt;
 import io.nearpay.sdk.data.models.TransactionReceipt;
 import io.nearpay.sdk.utils.ReceiptUtilsKt;
 import io.nearpay.sdk.utils.enums.AuthenticationData;
+import io.nearpay.sdk.utils.enums.GetDataFailure;
 import io.nearpay.sdk.utils.enums.LogoutFailure;
 import io.nearpay.sdk.utils.enums.PurchaseFailure;
 import io.nearpay.sdk.utils.enums.ReconcileFailure;
@@ -32,7 +34,9 @@ import io.nearpay.sdk.utils.enums.RefundFailure;
 import io.nearpay.sdk.utils.enums.ReversalFailure;
 import io.nearpay.sdk.utils.enums.SetupFailure;
 import io.nearpay.sdk.utils.enums.StatusCheckError;
+import io.nearpay.sdk.utils.enums.TransactionData;
 import io.nearpay.sdk.utils.listeners.BitmapListener;
+import io.nearpay.sdk.utils.listeners.GetTransactionListener;
 import io.nearpay.sdk.utils.listeners.LogoutListener;
 import io.nearpay.sdk.utils.listeners.PurchaseListener;
 import io.nearpay.sdk.utils.listeners.ReconcileListener;
@@ -143,8 +147,8 @@ public class RewaaNearpayPlugin extends Plugin {
 
     nearPay.purchase(amt, crn, enableReceiptUi, enableReversal, finishTimeOut, transactionId, enableUiDismiss, new PurchaseListener() {
       @Override
-      public void onPurchaseApproved(@Nullable List<TransactionReceipt> list) {
-        TransactionReceipt transactionReceipt = list.get(0);
+      public void onPurchaseApproved(@NonNull TransactionData transactionData) {
+        TransactionReceipt transactionReceipt = transactionData.getReceipts().get(0);
         JSObject ret = new JSObject();
         ret.put("paymentStatus", true);
         ret.put("crn", transactionReceipt.getPayment_account_reference());
@@ -196,7 +200,9 @@ public class RewaaNearpayPlugin extends Plugin {
     Long finishTimeOut = 2L; // Add the number of seconds
     String adminPin = "0000"; //[optional] when you add the admin pin here , the UI for admin pin won't be shown.
     Boolean enableUiDismiss = true ;// [optional] it will allow you to control dismissing the UI
-    nearPay.reconcile(enableReceiptUi, adminPin, finishTimeOut,enableUiDismiss, new ReconcileListener() {
+    UUID reconcileId = UUID.fromString(call.getString("reconcileId"));
+
+    nearPay.reconcile(reconcileId, enableReceiptUi, adminPin, finishTimeOut,enableUiDismiss, new ReconcileListener() {
       @Override
       public void onReconcileFinished(@Nullable ReconciliationReceipt reconciliationReceipt) {
         Log.i("onreconcileApproved",reconciliationReceipt.toString());
@@ -260,11 +266,10 @@ public class RewaaNearpayPlugin extends Plugin {
 
     nearPay.refund(amount, transactionReferenceRetrievalNumber, String.valueOf(customerReferenceNumber), enableReceiptUi, enableReversal, enableEditableRefundAmountUi, finishTimeOut, transactionId, adminPin, enableUiDismiss, new RefundListener() {
       @Override
-      public void onRefundApproved(@Nullable List<TransactionReceipt> list) {
-        Log.i("refundReceipt", String.valueOf(list.get(0).getQr_code()));
+      public void onRefundApproved(@NonNull TransactionData transactionData) {
         JSObject ret = new JSObject();
         ret.put("refundStatus", true);
-        ret.put("refundReceipt", list.get(0).getQr_code());
+        ret.put("refundReceipt", transactionData.getReceipts().get(0).getQr_code());
         call.resolve(ret);
       }
 
@@ -306,7 +311,7 @@ public class RewaaNearpayPlugin extends Plugin {
     Boolean enableUiDismiss = true ;// [optional] it will allow you to control dismissing the UI
     nearPay.reverse(transactionUuid,  enableReceiptUi, finishTimeOut,enableUiDismiss, new ReversalListener() {
       @Override
-      public void onReversalFinished(@Nullable List<TransactionReceipt> list) {
+      public void onReversalFinished(@NonNull TransactionData transactionData) {
         JSObject ret = new JSObject();
         ret.put("reverseStatus", true);
         call.resolve(ret);
@@ -337,6 +342,50 @@ public class RewaaNearpayPlugin extends Plugin {
       }
     });
   }
+
+  @PluginMethod
+  public void getTransactionByUUID(PluginCall call) {
+    String transactionUUID = call.getString("transactionUUID");
+    String jwt = call.getString("token");
+    nearPay.getTransactionByUuid(transactionUUID, new GetTransactionListener() {
+      @Override
+      public void onSuccess(@NonNull TransactionData transactionData) {
+        // write your code here
+        JSObject ret = new JSObject();
+        Gson gson = new Gson();
+        ret.put("transactionData", gson.toJson(transactionData));
+        call.resolve(ret);
+      }
+
+      @Override
+      public void onFailure(@NonNull GetDataFailure getDataFailure) {
+        String type = "";
+        if ( getDataFailure instanceof GetDataFailure.GeneralFailure){
+          // when there is general error .
+          type = "GeneralFailure";
+        }
+        else if ( getDataFailure instanceof GetDataFailure.AuthenticationFailed ){
+          // when the Authentication is failed
+          // You can use the following method to update your JWT
+          type = "AuthenticationFailed";
+          nearPay.updateAuthentication(new AuthenticationData.Jwt(jwt));
+        }
+        else if ( getDataFailure instanceof GetDataFailure.FailureMessage ){
+          type = "FailureMessage";
+          // when there is FailureMessage
+        }
+        else if ( getDataFailure instanceof GetDataFailure.InvalidStatus ){
+          type = "InvalidStatus";
+          // you can get the status using following code
+          List<StatusCheckError> status = ((GetDataFailure.InvalidStatus) getDataFailure).getStatus();
+        }
+        JSObject ret = new JSObject();
+        ret.put("error_type", type);
+        call.resolve(ret);
+      }
+    });
+  }
+
 
   @PluginMethod
   public void logoutNearpay(PluginCall call) {

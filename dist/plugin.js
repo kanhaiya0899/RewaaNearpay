@@ -40,6 +40,9 @@ var capacitorRewaaNearpay = (function (exports, core) {
         async reverse(options) {
             return options;
         }
+        async getTransactionByUUID(options) {
+            return options;
+        }
     }
 
     var web = /*#__PURE__*/Object.freeze({

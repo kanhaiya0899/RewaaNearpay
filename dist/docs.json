@@ -87,15 +87,15 @@
       },
       {
         "name": "reconcile",
-        "signature": "(options: { enableReceiptUi: boolean; token: string; }) => Promise<{ enableReceiptUi: boolean; token: string; }>",
+        "signature": "(options: { reconcileId: string; enableReceiptUi: boolean; token: string; }) => Promise<{ reconcileId: string; enableReceiptUi: boolean; token: string; }>",
         "parameters": [
           {
             "name": "options",
             "docs": "",
-            "type": "{ enableReceiptUi: boolean; token: string; }"
+            "type": "{ reconcileId: string; enableReceiptUi: boolean; token: string; }"
           }
         ],
-        "returns": "Promise<{ enableReceiptUi: boolean; token: string; }>",
+        "returns": "Promise<{ reconcileId: string; enableReceiptUi: boolean; token: string; }>",
         "tags": [],
         "docs": "",
         "complexTypes": [],
@@ -132,6 +132,22 @@
         "docs": "",
         "complexTypes": [],
         "slug": "reverse"
+      },
+      {
+        "name": "getTransactionByUUID",
+        "signature": "(options: { transactionUUID: string; token: string; }) => Promise<{ transactionUUID: string; token: string; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ transactionUUID: string; token: string; }"
+          }
+        ],
+        "returns": "Promise<{ transactionUUID: string; token: string; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "gettransactionbyuuid"
       }
     ],
     "properties": []

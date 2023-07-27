@@ -34,5 +34,8 @@ export class RewaaNearpayWeb extends WebPlugin {
     async reverse(options) {
         return options;
     }
+    async getTransactionByUUID(options) {
+        return options;
+    }
 }
 //# sourceMappingURL=web.js.map

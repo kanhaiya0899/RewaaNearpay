@@ -28,7 +28,7 @@ export class RewaaNearpayWeb extends WebPlugin implements RewaaNearpayPlugin {
     console.log('purchase amount: ', options);
     return options;
   }
-  async reconcile(options: { enableReceiptUi: boolean, token: string }): Promise<{ enableReceiptUi: boolean, token: string }> {
+  async reconcile(options: { reconcileId: string, enableReceiptUi: boolean, token: string }): Promise<{ reconcileId: string, enableReceiptUi: boolean, token: string }> {
     console.log('reconcile: ', options);
     return options;
   }
@@ -37,6 +37,9 @@ export class RewaaNearpayWeb extends WebPlugin implements RewaaNearpayPlugin {
     return options;
   }
   async reverse(options: { enableReceiptUi: boolean; transactionUuid: string, token: string; }): Promise<{ enableReceiptUi: boolean; transactionUuid: string, token: string; }> {
+    return options;
+  }
+  async getTransactionByUUID(options: { transactionUUID: string; token: string; }): Promise<{ transactionUUID: string; token: string; }> {
     return options;
   }
 }

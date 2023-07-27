@@ -28,9 +28,11 @@ export interface RewaaNearpayPlugin {
         token: string;
     }>;
     reconcile(options: {
+        reconcileId: string;
         enableReceiptUi: boolean;
         token: string;
     }): Promise<{
+        reconcileId: string;
         enableReceiptUi: boolean;
         token: string;
     }>;
@@ -54,6 +56,13 @@ export interface RewaaNearpayPlugin {
     }): Promise<{
         enableReceiptUi: boolean;
         transactionUuid: string;
+        token: string;
+    }>;
+    getTransactionByUUID(options: {
+        transactionUUID: string;
+        token: string;
+    }): Promise<{
+        transactionUUID: string;
         token: string;
     }>;
 }

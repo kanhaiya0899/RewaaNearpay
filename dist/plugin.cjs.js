@@ -43,6 +43,9 @@ class RewaaNearpayWeb extends core.WebPlugin {
     async reverse(options) {
         return options;
     }
+    async getTransactionByUUID(options) {
+        return options;
+    }
 }
 
 var web = /*#__PURE__*/Object.freeze({
