@@ -1,9 +1,5 @@
 import { WebPlugin } from '@capacitor/core';
 export class RewaaNearpayWeb extends WebPlugin {
-    async echo(options) {
-        console.log('ECHO', options);
-        return options;
-    }
     async initNearpay(options) {
         console.log('initNearpay', options);
         return options;

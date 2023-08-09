@@ -105,26 +105,24 @@ public class RewaaNearpayPlugin extends Plugin {
 
       @Override
       public void onSetupFailed(@NonNull SetupFailure setupFailure) {
-        int onSetupFailed = Log.e("onSetupFailed", String.valueOf(setupFailure));
-        String type = "";
-        if (setupFailure instanceof SetupFailure.AlreadyInstalled) {
-          // when the payment plugin is already installed  .
-          type = "AlreadyInstalled";
+        String type = "InvalidStatus";
+        if(setupFailure!=null){
+          int onSetupFailed = Log.e("onSetupFailed", String.valueOf(setupFailure));
+          if (setupFailure instanceof SetupFailure.AlreadyInstalled) {
+            // when the payment plugin is already installed  .
+            type = "AlreadyInstalled";
+          }
+          else if (setupFailure instanceof SetupFailure.NotInstalled){
+            // when the installtion failed .
+            type = "NotInstalled";
+          }
+          else if (setupFailure instanceof SetupFailure.AuthenticationFailed){
+            // when the Authentication Failed.
+            type = "AuthenticationFailed";
+            nearPay.updateAuthentication(new AuthenticationData.Jwt(jwt));
+          }
         }
-        else if (setupFailure instanceof SetupFailure.NotInstalled){
-          // when the installtion failed .
-          type = "NotInstalled";
-        }
-        else if (setupFailure instanceof SetupFailure.AuthenticationFailed){
-          // when the Authentication Failed.
-          type = "AuthenticationFailed";
-          nearPay.updateAuthentication(new AuthenticationData.Jwt(jwt));
-        }
-        else if (setupFailure instanceof SetupFailure.InvalidStatus){
-          // you can get the status using the following code
-          List<StatusCheckError> status = ((SetupFailure.InvalidStatus) setupFailure).getStatus();
-          type = "InvalidStatus";
-        }
+
         JSObject ret = new JSObject();
         ret.put("isSetupComplete", false);
         ret.put("error_type", type);
@@ -148,41 +146,50 @@ public class RewaaNearpayPlugin extends Plugin {
     nearPay.purchase(amt, crn, enableReceiptUi, enableReversal, finishTimeOut, transactionId, enableUiDismiss, new PurchaseListener() {
       @Override
       public void onPurchaseApproved(@NonNull TransactionData transactionData) {
-        TransactionReceipt transactionReceipt = transactionData.getReceipts().get(0);
         JSObject ret = new JSObject();
-        ret.put("paymentStatus", true);
-        ret.put("crn", transactionReceipt.getPayment_account_reference());
-        ret.put("reference_retrieval", transactionReceipt.getRetrieval_reference_number());
-        ret.put("uuid", transactionReceipt.getTransaction_uuid());
-        ret.put("status_msg", transactionReceipt.getStatus_message());
-        ret.put("tid", transactionReceipt.getTid());
-        ret.put("is_approved", transactionReceipt.is_approved());
-        ret.put("purchaseReceipt", transactionReceipt.getQr_code());
-        call.resolve(ret);
+        if(transactionData!=null && transactionData.getReceipts()!=null && transactionData.getReceipts().size()>0 && transactionData.getReceipts().get(0)!=null){
+            TransactionReceipt transactionReceipt = transactionData.getReceipts().get(0);
+            ret.put("paymentStatus", true);
+            ret.put("crn", transactionReceipt.getPayment_account_reference());
+            ret.put("reference_retrieval", transactionReceipt.getRetrieval_reference_number());
+            ret.put("uuid", transactionReceipt.getTransaction_uuid());
+            ret.put("status_msg", transactionReceipt.getStatus_message());
+            ret.put("tid", transactionReceipt.getTid());
+            ret.put("is_approved", transactionReceipt.is_approved());
+            ret.put("purchaseReceipt", transactionReceipt.getQr_code());
+            call.resolve(ret);
+        }else{
+          ret.put("paymentStatus", false);
+          ret.put("error_type", "NoDataFound");
+          call.resolve();
+        }
+
       }
 
       @Override
       public void onPurchaseFailed(@NonNull PurchaseFailure purchaseFailure) {
-        Log.e("onPurchaseFailed",purchaseFailure.toString());
-        String type = "";
-        if (purchaseFailure instanceof PurchaseFailure.GeneralFailure) {
-          Log.e("purchaseFailure","GeneralFailure");
-          type = "GeneralFailure";
-        } else if (purchaseFailure instanceof PurchaseFailure.PurchaseDeclined){
-          Log.e("purchaseFailure","PurchaseDeclined");
-          type = "PurchaseDeclined";
-        } else if (purchaseFailure instanceof PurchaseFailure.PurchaseRejected){
-          Log.e("purchaseFailure","PurchaseRejected");
-          type = "PurchaseRejected";
-        } else if (purchaseFailure instanceof PurchaseFailure.AuthenticationFailed){
-          Log.e("purchaseFailure","AuthenticationFailed");
-          type = "AuthenticationFailed";
-          nearPay.updateAuthentication(new AuthenticationData.Jwt(jwt));
-        } else if (purchaseFailure instanceof PurchaseFailure.InvalidStatus){
-          // you can get the status using the following code
-          List<StatusCheckError> status = ((PurchaseFailure.InvalidStatus) purchaseFailure).getStatus();
-          Log.e("purchaseFailure","InvalidStatus "+status.toString());
-          type = "InvalidStatus";
+        String type = "InvalidStatus";
+        if(purchaseFailure!=null){
+          if (purchaseFailure instanceof PurchaseFailure.GeneralFailure) {
+            Log.e("purchaseFailure","GeneralFailure");
+            type = "GeneralFailure";
+          } else if (purchaseFailure instanceof PurchaseFailure.PurchaseDeclined){
+            Log.e("purchaseFailure","PurchaseDeclined");
+            type = "PurchaseDeclined";
+          } else if (purchaseFailure instanceof PurchaseFailure.PurchaseRejected){
+            Log.e("purchaseFailure","PurchaseRejected");
+            type = "PurchaseRejected";
+          } else if (purchaseFailure instanceof PurchaseFailure.AuthenticationFailed){
+            Log.e("purchaseFailure","AuthenticationFailed");
+            type = "AuthenticationFailed";
+            nearPay.updateAuthentication(new AuthenticationData.Jwt(jwt));
+          } else if (purchaseFailure instanceof PurchaseFailure.InvalidStatus){
+            // you can get the status using the following code
+            if(((PurchaseFailure.InvalidStatus) purchaseFailure).getStatus()!=null){
+              List<StatusCheckError> status = ((PurchaseFailure.InvalidStatus) purchaseFailure).getStatus();
+              Log.e("purchaseFailure","InvalidStatus "+status.toString());
+            }
+          }
         }
         JSObject ret = new JSObject();
         ret.put("paymentStatus", false);
@@ -205,13 +212,7 @@ public class RewaaNearpayPlugin extends Plugin {
     nearPay.reconcile(reconcileId, enableReceiptUi, adminPin, finishTimeOut,enableUiDismiss, new ReconcileListener() {
       @Override
       public void onReconcileFinished(@Nullable ReconciliationReceipt reconciliationReceipt) {
-        if(reconciliationReceipt==null){
-          JSObject ret = new JSObject();
-          ret.put("reconcileStatus", false);
-          ret.put("error_type", "TransactionNotFound");
-          call.resolve(ret);
-          return;
-        }else{
+        if(reconciliationReceipt!=null){
           ReceiptUtilsKt.toImage(reconciliationReceipt, mContext, 512, 14, new BitmapListener() {
             @Override
             public void result(@Nullable Bitmap bitmap) {
@@ -226,6 +227,11 @@ public class RewaaNearpayPlugin extends Plugin {
               call.resolve(ret);
             }
           });
+        }else{
+          JSObject ret = new JSObject();
+          ret.put("reconcileStatus", false);
+          ret.put("error_type", "NoDataFound");
+          call.resolve(ret);
         }
       }
 
@@ -326,21 +332,22 @@ public class RewaaNearpayPlugin extends Plugin {
 
       @Override
       public void onReversalFailed(@NonNull ReversalFailure reversalFailure) {
-        Log.e("reversalFailure", reversalFailure.toString());
-        String type = "";
-        if (reversalFailure instanceof ReversalFailure.AuthenticationFailed) {
-          Log.e("reversalFailure", "AuthenticationFailed");
-          type = "AuthenticationFailed";
-          nearPay.updateAuthentication(new AuthenticationData.Jwt(jwt));
-        } else if (reversalFailure instanceof ReversalFailure.GeneralFailure) {
-          Log.e("reversalFailure", "GeneralFailure");
-          type = "GeneralFailure";
-        } else if (reversalFailure instanceof ReversalFailure.FailureMessage) {
-          Log.e("reversalFailure", "FailureMessage");
-          type = "FailureMessage";
-        } else if (reversalFailure instanceof ReversalFailure.InvalidStatus) {
-          Log.e("reversalFailure", "InvalidStatus");
-          type = "InvalidStatus";
+        String type = "InvalidStatus";
+        if(reversalFailure!=null){
+          Log.e("reversalFailure", reversalFailure.toString());
+          if (reversalFailure instanceof ReversalFailure.AuthenticationFailed) {
+            Log.e("reversalFailure", "AuthenticationFailed");
+            type = "AuthenticationFailed";
+            nearPay.updateAuthentication(new AuthenticationData.Jwt(jwt));
+          } else if (reversalFailure instanceof ReversalFailure.GeneralFailure) {
+            Log.e("reversalFailure", "GeneralFailure");
+            type = "GeneralFailure";
+          } else if (reversalFailure instanceof ReversalFailure.FailureMessage) {
+            Log.e("reversalFailure", "FailureMessage");
+            type = "FailureMessage";
+          } else if (reversalFailure instanceof ReversalFailure.InvalidStatus) {
+            Log.e("reversalFailure", "InvalidStatus");
+          }
         }
         JSObject ret = new JSObject();
         ret.put("reverseStatus", false);
@@ -355,36 +362,38 @@ public class RewaaNearpayPlugin extends Plugin {
     String transactionUUID = call.getString("transactionUUID");
     String jwt = call.getString("token");
     nearPay.getTransactionByUuid(transactionUUID, new GetTransactionListener() {
+
       @Override
       public void onSuccess(@NonNull TransactionData transactionData) {
-        // write your code here
-        JSObject ret = new JSObject();
-        Gson gson = new Gson();
-        ret.put("transactionData", gson.toJson(transactionData));
-        call.resolve(ret);
+        if(transactionData!=null){
+          JSObject ret = new JSObject();
+          Gson gson = new Gson();
+          ret.put("transactionData", gson.toJson(transactionData));
+          call.resolve(ret);
+        }else{
+          JSObject ret = new JSObject();
+          ret.put("error_type", "NoDataFound");
+          call.resolve(ret);
+        }
       }
 
       @Override
       public void onFailure(@NonNull GetDataFailure getDataFailure) {
-        String type = "";
-        if ( getDataFailure instanceof GetDataFailure.GeneralFailure){
-          // when there is general error .
-          type = "GeneralFailure";
-        }
-        else if ( getDataFailure instanceof GetDataFailure.AuthenticationFailed ){
-          // when the Authentication is failed
-          // You can use the following method to update your JWT
-          type = "AuthenticationFailed";
-          nearPay.updateAuthentication(new AuthenticationData.Jwt(jwt));
-        }
-        else if ( getDataFailure instanceof GetDataFailure.FailureMessage ){
-          type = "FailureMessage";
-          // when there is FailureMessage
-        }
-        else if ( getDataFailure instanceof GetDataFailure.InvalidStatus ){
-          type = "InvalidStatus";
-          // you can get the status using following code
-          List<StatusCheckError> status = ((GetDataFailure.InvalidStatus) getDataFailure).getStatus();
+        String type = "InvalidStatus";
+        if(getDataFailure!=null){
+          if ( getDataFailure instanceof GetDataFailure.GeneralFailure){
+            // when there is general error .
+            type = "GeneralFailure";
+          }
+          else if ( getDataFailure instanceof GetDataFailure.AuthenticationFailed ){
+            // when the Authentication is failed
+            // You can use the following method to update your JWT
+            type = "AuthenticationFailed";
+            nearPay.updateAuthentication(new AuthenticationData.Jwt(jwt));
+          }
+          else if ( getDataFailure instanceof GetDataFailure.FailureMessage ){
+            type = "FailureMessage";
+          }
         }
         JSObject ret = new JSObject();
         ret.put("error_type", type);
@@ -417,10 +426,4 @@ public class RewaaNearpayPlugin extends Plugin {
     });
 
   }
-
-  public void sendEvent(JSObject data) {
-    Log.e("percent", String.valueOf(data));
-    notifyListeners("downloadProgressChange", data);
-  }
-
 }

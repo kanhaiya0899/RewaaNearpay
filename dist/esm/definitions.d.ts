@@ -1,9 +1,4 @@
 export interface RewaaNearpayPlugin {
-    echo(options: {
-        value: string;
-    }): Promise<{
-        value: string;
-    }>;
     setupNearpay(options: {
         token: string;
     }): Promise<{

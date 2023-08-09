@@ -1,5 +1,4 @@
 export interface RewaaNearpayPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
   setupNearpay(options: { token: string }): Promise<{ token: string }>;
   initNearpay(options: { token: string, isProd: boolean }): Promise<{ token: string; }>;
   logoutNearpay(options: { token: string; }): Promise<{ token: string; }>;

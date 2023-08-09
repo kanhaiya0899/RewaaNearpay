@@ -9,10 +9,6 @@ const RewaaNearpay = core.registerPlugin('RewaaNearpay', {
 });
 
 class RewaaNearpayWeb extends core.WebPlugin {
-    async echo(options) {
-        console.log('ECHO', options);
-        return options;
-    }
     async initNearpay(options) {
         console.log('initNearpay', options);
         return options;
