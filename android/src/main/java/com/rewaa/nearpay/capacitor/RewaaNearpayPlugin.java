@@ -205,21 +205,28 @@ public class RewaaNearpayPlugin extends Plugin {
     nearPay.reconcile(reconcileId, enableReceiptUi, adminPin, finishTimeOut,enableUiDismiss, new ReconcileListener() {
       @Override
       public void onReconcileFinished(@Nullable ReconciliationReceipt reconciliationReceipt) {
-        Log.i("onreconcileApproved",reconciliationReceipt.toString());
-        ReceiptUtilsKt.toImage(reconciliationReceipt, mContext, 512, 14, new BitmapListener() {
-          @Override
-          public void result(@Nullable Bitmap bitmap) {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream .toByteArray();
-            String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-            JSObject ret = new JSObject();
-            ret.put("reconcileStatus", true);
-            ret.put("reconciliationReceipt", reconciliationReceipt.getQr_code());
-            ret.put("base64", encoded);
-            call.resolve(ret);
-          }
-        });
+        if(reconciliationReceipt==null){
+          JSObject ret = new JSObject();
+          ret.put("reconcileStatus", false);
+          ret.put("error_type", "TransactionNotFound");
+          call.resolve(ret);
+          return;
+        }else{
+          ReceiptUtilsKt.toImage(reconciliationReceipt, mContext, 512, 14, new BitmapListener() {
+            @Override
+            public void result(@Nullable Bitmap bitmap) {
+              ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+              bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+              byte[] byteArray = byteArrayOutputStream .toByteArray();
+              String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+              JSObject ret = new JSObject();
+              ret.put("reconcileStatus", true);
+              ret.put("reconciliationReceipt", reconciliationReceipt.getQr_code());
+              ret.put("base64", encoded);
+              call.resolve(ret);
+            }
+          });
+        }
       }
 
       @Override
