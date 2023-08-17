@@ -28,6 +28,7 @@ import io.nearpay.sdk.utils.ReceiptUtilsKt;
 import io.nearpay.sdk.utils.enums.AuthenticationData;
 import io.nearpay.sdk.utils.enums.GetDataFailure;
 import io.nearpay.sdk.utils.enums.LogoutFailure;
+import io.nearpay.sdk.utils.enums.NetworkConfiguration;
 import io.nearpay.sdk.utils.enums.PurchaseFailure;
 import io.nearpay.sdk.utils.enums.ReconcileFailure;
 import io.nearpay.sdk.utils.enums.RefundFailure;
@@ -43,7 +44,6 @@ import io.nearpay.sdk.utils.listeners.ReconcileListener;
 import io.nearpay.sdk.utils.listeners.RefundListener;
 import io.nearpay.sdk.utils.listeners.ReversalListener;
 import io.nearpay.sdk.utils.listeners.SetupListener;
-import io.nearpay.sdk.utils.enums.AuthenticationData;
 
 @CapacitorPlugin(name = "RewaaNearpay")
 public class RewaaNearpayPlugin extends Plugin {
@@ -67,9 +67,21 @@ public class RewaaNearpayPlugin extends Plugin {
     JSObject ret = new JSObject();
     if (!TextUtils.isEmpty(jwt)) {
       if (isProd) {
-        nearPay = new NearPay(mContext, jwtData, Locale.getDefault(), Environments.PRODUCTION);
+        nearPay = new NearPay.Builder()
+          .context(mContext)
+          .authenticationData(jwtData)
+          .environment(Environments.PRODUCTION)
+          .locale(Locale.getDefault())
+          .networkConfiguration(NetworkConfiguration.DEFAULT)
+          .build();
       } else {
-        nearPay = new NearPay(mContext, jwtData, Locale.getDefault(), Environments.SANDBOX);
+        nearPay = new NearPay.Builder()
+          .context(mContext)
+          .authenticationData(jwtData)
+          .environment(Environments.SANDBOX)
+          .locale(Locale.getDefault())
+          .networkConfiguration(NetworkConfiguration.DEFAULT)
+          .build();
       }
       if(nearPay != null)
         ret.put("status", true);
