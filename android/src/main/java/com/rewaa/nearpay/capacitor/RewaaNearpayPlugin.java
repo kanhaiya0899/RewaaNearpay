@@ -63,9 +63,9 @@ public class RewaaNearpayPlugin extends Plugin {
   public void initNearpay(PluginCall call) {
     String jwt = call.getString("token");
     boolean isProd = call.getBoolean("isProd");
-    AuthenticationData jwtData =  new AuthenticationData.Jwt(jwt);
     JSObject ret = new JSObject();
     if (!TextUtils.isEmpty(jwt)) {
+      AuthenticationData jwtData =  new AuthenticationData.Jwt(jwt);
       if (isProd) {
         nearPay = new NearPay.Builder()
           .context(mContext)
@@ -83,11 +83,14 @@ public class RewaaNearpayPlugin extends Plugin {
           .networkConfiguration(NetworkConfiguration.DEFAULT)
           .build();
       }
-      if(nearPay != null)
+      if(nearPay != null) {
         ret.put("status", true);
-      else
+      } else {
+        Log.e(TAG+" > initNearpay > JWT obj", "jwtData>>> "+String.valueOf(jwtData));
         ret.put("status", false);
+      }
     } else {
+      Log.e(TAG+" > initNearpay > JWT empty", "jwt>>> "+jwt);
       ret.put("status", false);
     }
     call.resolve(ret);
@@ -100,7 +103,7 @@ public class RewaaNearpayPlugin extends Plugin {
     nearPay.setup(new SetupListener() {
       @Override
       public void onSetupCompleted() {
-        Log.i("onSetupCompleted","setup is done successfully");
+        Log.i(TAG+" > onSetupCompleted","setup is done successfully");
         JSObject ret = new JSObject();
         ret.put("isSetupComplete", true);
         ret.put("status_msg", "setup is done successfully");
@@ -123,9 +126,13 @@ public class RewaaNearpayPlugin extends Plugin {
           else if (setupFailure instanceof SetupFailure.AuthenticationFailed){
             // when the Authentication Failed.
             type = "AuthenticationFailed";
-            nearPay.updateAuthentication(new AuthenticationData.Jwt(jwt));
+            if(!TextUtils.isEmpty(jwt))
+              nearPay.updateAuthentication(new AuthenticationData.Jwt(jwt));
+            else
+              Log.e(TAG+" > onSetupFailed > jwt is empty","jwt>> "+jwt);
           }
         }
+        Log.e(TAG+" > onSetupFailed", String.valueOf(setupFailure));
 
         JSObject ret = new JSObject();
         ret.put("isSetupComplete", false);
@@ -191,7 +198,7 @@ public class RewaaNearpayPlugin extends Plugin {
             // you can get the status using the following code
             if(((PurchaseFailure.InvalidStatus) purchaseFailure).getStatus()!=null){
               List<StatusCheckError> status = ((PurchaseFailure.InvalidStatus) purchaseFailure).getStatus();
-              Log.e("purchaseFailure","InvalidStatus "+status.toString());
+              Log.e(TAG + " > purchaseFailure","InvalidStatus "+status.toString());
             }
           }
         }
@@ -216,10 +223,13 @@ public class RewaaNearpayPlugin extends Plugin {
     nearPay.reconcile(reconcileId, enableReceiptUi, adminPin, finishTimeOut,enableUiDismiss, new ReconcileListener() {
       @Override
       public void onReconcileFinished(@Nullable ReconciliationReceipt reconciliationReceipt) {
+
         if(reconciliationReceipt!=null){
+          Log.i(TAG,"onReconcileFinished");
           ReceiptUtilsKt.toImage(reconciliationReceipt, mContext, 512, 14, new BitmapListener() {
             @Override
             public void result(@Nullable Bitmap bitmap) {
+              Log.i(TAG,"ReceiptUtilsKt.toImage result success");
               ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
               bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
               byte[] byteArray = byteArrayOutputStream .toByteArray();
@@ -232,6 +242,7 @@ public class RewaaNearpayPlugin extends Plugin {
             }
           });
         }else{
+          Log.e(TAG,"onReconcileFinished reconciliationReceipt is null");
           JSObject ret = new JSObject();
           ret.put("reconcileStatus", false);
           ret.put("error_type", "NoDataFound");
@@ -241,7 +252,7 @@ public class RewaaNearpayPlugin extends Plugin {
 
       @Override
       public void onReconcileFailed(@NonNull ReconcileFailure reconcileFailure) {
-        Log.e("reconcileFailure",reconcileFailure.toString());
+        Log.e(TAG+" > reconcileFailure",reconcileFailure.toString());
         String type = "";
         if (reconcileFailure instanceof ReconcileFailure.FailureMessage) {
           Log.e("reconcileFailure","GeneralFailure");
@@ -412,12 +423,15 @@ public class RewaaNearpayPlugin extends Plugin {
     nearPay.logout(new LogoutListener() {
       @Override
       public void onLogoutCompleted() {
+        Log.i(TAG,"onLogoutCompleted");
         JSObject ret = new JSObject();
         ret.put("status", true);
         call.resolve(ret);
       }
       @Override
       public void onLogoutFailed(@NonNull LogoutFailure logoutFailure) {
+        Log.e("logoutNearpay onLogoutFailed", String.valueOf(logoutFailure));
+
         JSObject ret = new JSObject();
         if (logoutFailure instanceof LogoutFailure.AlreadyLoggedOut) {
           ret.put("status", true);
