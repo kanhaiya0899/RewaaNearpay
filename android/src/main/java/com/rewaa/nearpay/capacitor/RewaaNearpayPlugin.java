@@ -116,7 +116,7 @@ public class RewaaNearpayPlugin extends Plugin {
         String type = "InvalidStatus";
         String msg = String.valueOf(setupFailure);
         Log.e("onSetupFailed", msg);
-        if (setupFailure != null) {          
+        if (setupFailure != null) {
           if (setupFailure instanceof SetupFailure.AlreadyInstalled) {
             // when the payment plugin is already installed  .
             type = "AlreadyInstalled";
@@ -126,12 +126,14 @@ public class RewaaNearpayPlugin extends Plugin {
           } else if (setupFailure instanceof SetupFailure.AuthenticationFailed) {
             // when the Authentication Failed.
             type = "AuthenticationFailed";
-            if (!TextUtils.isEmpty(jwt))
+            if (!TextUtils.isEmpty(jwt)) {
               nearPay.updateAuthentication(new AuthenticationData.Jwt(jwt));
-            else{
+            } else {
               msg += " jwt is empty jwt>> " + jwt;
               Log.e(TAG + " > onSetupFailed > jwt is empty", "jwt>> " + jwt);
-            }              
+            }
+          } else if (setupFailure instanceof SetupFailure.InvalidStatus) {
+            type = "InvalidStatus";
           }
         }
         Log.e(TAG + " > onSetupFailed", String.valueOf(setupFailure));
