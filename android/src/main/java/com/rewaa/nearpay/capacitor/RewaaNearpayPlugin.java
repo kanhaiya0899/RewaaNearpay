@@ -381,7 +381,7 @@ public class RewaaNearpayPlugin extends Plugin {
   public void getTransactionByUUID(PluginCall call) {
     String transactionUUID = call.getString("transactionUUID");
     String jwt = call.getString("token");
-    nearPay.getTransactionByUuid(transactionUUID, new GetTransactionListener() {
+    nearPay.getTransactionByUuid(transactionUUID, false, 30, new GetTransactionListener() {
 
       @Override
       public void onSuccess(@NonNull TransactionData transactionData) {
